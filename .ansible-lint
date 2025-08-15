@@ -2,14 +2,15 @@
 # Ansible managed
 #
 exclude_paths:
+  - .cache
+  - .github
+  - .poetry/
+  - .tox/
   - meta/preferences.yml
   - meta/main.yml
   - molecule/default/prepare.yml
   - molecule/default/converge.yml
   - molecule/default/verify.yml
   - molecule/default/collections.yml
-  - .tox
-  - .github
-  - .cache
 skip_list:
   - experimental

@@ -12,6 +12,9 @@ rules:
   truthy: disable
 
 ignore: |
-  .tox/
-  .cache/
   .ansible-lint
+  .cache
+  .github
+  .poetry
+  .tox
+  .travis.yml
