@@ -33,6 +33,7 @@ The machine needs to be prepared. In CI this is done using `molecule/default/pre
 ```
 
 Also see a [full explanation and example](https://robertdebock.nl/how-to-use-these-roles.html) on how to use these roles.
+This role also adds hostnale entries to freeipa IDM if the host is in the `ipaclients` group and the idm server is installed.
 
 ## [Role Variables](#role-variables)
 

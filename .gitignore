@@ -1,5 +1,6 @@
 .molecule
 *.log
+.ansible
 *.swp
 .tox
 .cache

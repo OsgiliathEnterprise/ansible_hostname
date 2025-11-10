@@ -1,0 +1,28 @@
+---
+
+- name: Facts | Gather facts on newly created machines
+  ansible.builtin.setup:
+  register: hostsfacts
+
+- name: Facts | get current hostname
+  ansible.builtin.command: "hostname"
+  register: ipahost_machine_hostname
+  changed_when: false
+
+- name: Facts | Set ipv4 facts
+  ansible.builtin.set_fact:
+    hostname_current_ip4adress: "{{ [hostsfacts.ansible_facts['ansible_' + preferred_nic | replace('-', '_')].ipv4.address] if preferred_nic is defined else ([hostsfacts.ansible_facts.ansible_default_ipv4.address] if hostsfacts.ansible_facts.ansible_default_ipv4.address is defined else hostsfacts.ansible_facts.ansible_all_ipv4_addresses if hostsfacts.ansible_facts.ansible_all_ipv4_addresses is defined else []) | reject('match', '^.*\\.1$') | default([]) }}"
+    hostname_current_ip6adress: "{{ [hostsfacts.ansible_facts['ansible_' + preferred_nic | replace('-', '_')].ipv6.address] if preferred_nic is defined and hostsfacts.ansible_facts['ansible_' + preferred_nic | replace('-', '_')].ipv6.address is defined else ([hostsfacts.ansible_facts.ansible_default_ipv6.address] if hostsfacts.ansible_facts.ansible_default_ipv6.address is defined else hostsfacts.ansible_facts.ansible_all_ipv6_addresses if hostsfacts.ansible_facts.ansible_all_ipv6_addresses is defined else []) | default([]) }}"
+    hostname_current_hostname: "{{ hostname | default(ipahost_machine_hostname.stdout) }}"
+
+- name: Facts | Display host ip4
+  ansible.builtin.debug:
+    msg: "{{ hostname_current_ip4adress }}"
+
+- name: Facts | Display host ip6
+  ansible.builtin.debug:
+    msg: "{{ hostname_current_ip6adress }}"
+
+- name: Facts | Display hostname
+  ansible.builtin.debug:
+    msg: "{{ hostname_current_hostname }}"
