@@ -13,13 +13,26 @@ on:
       - tags/*
 
 jobs:
+  requirements:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          path: tcharl.ansible_hostname
+      - name: install prereq
+        run: |
+          cd tcharl.ansible_hostname
+          ansible-galaxy role install -r requirements.yml
   lint:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
-          path: tcharl.ansible_routing
+          path: tcharl.ansible_hostname
       - name: update apt
         run: |
           sudo apt update
@@ -31,7 +44,7 @@ jobs:
           pip3 install wheel setuptools tox
       - name: tox lint
         run: |
-          cd tcharl.ansible_routing
+          cd tcharl.ansible_hostname
           tox -e lint
   test:
     # The type of runner that the job will run on
@@ -41,7 +54,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
-          path: tcharl.ansible_routing
+          path: tcharl.ansible_hostname
       - name: update apt
         run: |
           sudo apt update
@@ -50,23 +63,17 @@ jobs:
 #          sudo apt upgrade
       - name: install aptitude packages
         run: |
-          sudo apt -y install sudo python3 python3-pip podman
+          sudo apt -y install sudo python3 python3-pip python3-wheel python3-setuptools podman
       - name: pip install packages
         run: |
-          pip3 install wheel setuptools tox
-      - name: Setup Podman Rootless
+          sudo pip3 install -I tox
+      - name: Show Podman info
         run: |
-          # Clean up any partial UID attempts and initialize storage
-          podman system migrate
-          # Ensure the storage driver is set to overlay for performance/compatibility
-          mkdir -p ~/.config/containers
-          echo -e "[storage]\ndriver = \"overlay\"\n[storage.options.overlay]\nmount_program = \"/usr/bin/fuse-overlayfs\"" > ~/.config/containers/storage.conf
+          sudo podman info
 
       - name: Test with podman
         env:
-          # This forces Molecule to use the user's podman instance
-          CONTAINER_HOST: unix:///run/user/$(id -u)/podman/podman.sock
+          ANSIBLE_REMOTE_TMP: /var/tmp/ansible-remote
         run: |
-          cd tcharl.ansible_routing
-          # Use podman unshare to ensure we are in a proper user namespace
-          tox -e test-exec
+          cd tcharl.ansible_hostname
+          sudo tox -e test-exec
