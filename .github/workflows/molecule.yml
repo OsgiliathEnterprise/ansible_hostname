@@ -26,6 +26,7 @@ jobs:
         run: |
           cd tcharl.ansible_hostname
           ansible-galaxy role install -r requirements.yml
+          ansible-galaxy collection install -r requirements-collections.yml
   lint:
     runs-on: ubuntu-latest
     steps:

@@ -28,6 +28,8 @@
   when:
     - ansible_connection not in [ "container", "docker", "community.docker.docker" ]
     - hostname_current_hostname is defined
+    - not ansible_facts.virtualization_type == "container"
+    - not ansible_facts.virtualization_type == "docker"
 
 - name: Host file configuration for ipv4
   ansible.builtin.include_tasks: host.yml
