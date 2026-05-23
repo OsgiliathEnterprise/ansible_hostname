@@ -1,6 +1,7 @@
 ---
 dependency:
   name: galaxy
+  enabled: ${DEPENDENCY_ENABLED:-True}
   options:
     role-file: ${REQUIREMENTS_PATH:-requirements.yml}
     requirements-file: requirements-collections.yml
@@ -9,10 +10,7 @@ driver:
 platforms:
   - name: "hostname-${image:-fedora}-${tag:-latest}${TOX_ENVNAME}"
     image: fedora:44
-    # image: ubi9/ubi-init:latest
     dockerfile: ../common/Dockerfile.j2
-    # registry:
-    #   url: registry.access.redhat.com
     privileged: True
     command: "/sbin/init"
     systemd: True
@@ -28,7 +26,7 @@ platforms:
 provisioner:
   name: ansible
   env:
-    ANSIBLE_COLLECTIONS_PATH: "${MOLECULE_PROJECT_DIRECTORY}/../community-collections:${ANSIBLE_COLLECTIONS_PATH}"
+    ANSIBLE_COLLECTIONS_PATH: "${MOLECULE_PROJECT_DIRECTORY}/../community-collections:${HOME}/.ansible/collections:/usr/share/ansible/collections"
     ANSIBLE_REMOTE_TMP: /var/tmp/ansible-remote
     ANSIBLE_ASYNC_DIR: "/tmp/.ansible_async"
   options:
