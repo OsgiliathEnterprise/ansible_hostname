@@ -71,7 +71,6 @@ jobs:
       - name: Show Podman info
         run: |
           sudo podman info
-
       - name: Test with podman
         env:
           ANSIBLE_REMOTE_TMP: /var/tmp/ansible-remote

@@ -33,6 +33,6 @@ provisioner:
     vvv: True
   config_options:
     defaults:
-      remote_tmp: /var/tmp/ansible-remote
+      remote_tmp: /tmp
 verifier:
   name: ansible
