@@ -1,4 +1,5 @@
 .molecule
+dist
 *.log
 .ansible
 *.swp
