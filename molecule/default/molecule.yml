@@ -8,8 +8,8 @@ dependency:
 driver:
   name: podman
 platforms:
-  - name: "hostname-${image:-fedora}-${tag:-latest}${TOX_ENVNAME}"
-    image: fedora:44
+  - name: "hostname-fedora"
+    image: registry.fedoraproject.org/fedora:44
     dockerfile: ../common/Dockerfile.j2
     privileged: True
     command: "/sbin/init"
