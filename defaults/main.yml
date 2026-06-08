@@ -5,8 +5,9 @@
 hostname: "{{ inventory_hostname_short }}"
 
 # Should the machine be rebooted when the hostname is changed?
-hostname_reboot: yes
-handle_ipv4: yes
+hostname_reboot: Yes
+handle_ipv4: Yes
 handle_ipv6: False
 idm_client_group: 'ipaclients'
 idm_group: 'ipaservers'   # do not change: convention from the ipa roles
+skip_hostname_assert: False

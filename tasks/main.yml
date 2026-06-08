@@ -3,6 +3,8 @@
 
 - name: Import assert.yml
   ansible.builtin.import_tasks: assert.yml
+  when:
+    - not skip_hostname_assert
 
 - name: Install requirements
   ansible.builtin.package:
